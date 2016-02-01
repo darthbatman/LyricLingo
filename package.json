@@ -1,8 +1,10 @@
 {
-  "name": "lyriclingo",
-  "version": "1.0.0",
+  "name": "LyricLingo",
+  "version": "0.0.1",
   "description": "Learn the language of your choice by listening to the music you love.",
-  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
   "dependencies": {
     "bing-translate": "^0.0.2",
     "express": "^4.13.4",
@@ -12,21 +14,5 @@
     "spotify": "^0.3.0",
     "rapgenius-js": "^0.1.2",
     "spotify-web-api-node": "^2.2.0"
-  },
-  "engines": {
-    "node": "4.2.3"
-  },
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/darthbatman/LyricLingo.git"
-  },
-  "author": "Rishi Masand",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/darthbatman/LyricLingo/issues"
-  },
-  "homepage": "https://github.com/darthbatman/LyricLingo#readme"
+  }
 }
