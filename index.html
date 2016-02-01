@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <!-- <link rel="stylesheet" href="/css/chat.css"> -->
+</head>
+<body>
+
+
+      <form action="">
+      <input class="inputMessage" placeholder="Type here..."/>
+      <input class="ainputMessage" placeholder="Type here..."/>
+      <input type="submit" value="Submit">
+      </form>
+    <p id="org">
+
+    </p>
+    <p id="tans">
+
+    </p>
+
+  <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
+  <script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
+  <script type="text/javascript">
+      var socket = io.connect("http://f19a3639.ngrok.io");
+
+      $('form').submit(function(e){
+        e.preventDefault();
+        socket.emit('song', $('.inputMessage').val(), $('.ainputMessage').val());
+        socket.on('text', function(org, trans){
+          //alert('is typing');
+          $('#org').text(org);
+          $('#tans').text(trans);
+        });
+        return false;
+      });
+
+  </script>
+</body>
+</html>
