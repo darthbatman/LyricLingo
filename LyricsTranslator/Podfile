@@ -1,0 +1,14 @@
+# Uncomment this line to define a global platform for your project
+platform :ios, "7.0"
+
+source 'https://github.com/CocoaPods/Specs.git'
+
+target 'ApiAIDemoSwift' do
+
+pod 'ApiAI/Core', :path => '../'
+pod 'ApiAI/VoiceRequest', :path => '../'
+pod 'ApiAI/UIKit', :path => '../'
+pod 'ApiAI/ResponseMapping', :path => '../'
+pod 'MBProgressHUD'
+
+end

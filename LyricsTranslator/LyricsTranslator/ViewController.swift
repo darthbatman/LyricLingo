@@ -10,9 +10,10 @@ import Foundation
 import CoreLocation
 import MediaPlayer
 import WatchConnectivity
+//import Cocoa
 //dont have to uncletsocket
 
-class ViewController: UIViewController, WCSessionDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, AVCaptureVideoDataOutputSampleBufferDelegate, CLLocationManagerDelegate {
+class ViewController: UIViewController, WCSessionDelegate, UIImagePickerControllerDelegate, UIPickerViewDelegate, UIPickerViewDataSource, UINavigationControllerDelegate, AVCaptureVideoDataOutputSampleBufferDelegate, CLLocationManagerDelegate {
     
     var locationManager = CLLocationManager()
     
@@ -22,7 +23,13 @@ class ViewController: UIViewController, WCSessionDelegate, UIImagePickerControll
                                                     // whose idea was this
     
     
-    let socket = SocketIOClient(socketURL: NSURL(string: "http://d1b12b03.ngrok.io")!)
+    let socket = SocketIOClient(socketURL: NSURL(string: "http://992403e0.ngrok.io")!)
+    
+    // hardcoded array of languages
+    let languages = ["en", "es", "ru", "de", "hi", "it", "ko", "pl", "pt", "he"]
+    
+  
+    @IBOutlet weak var languagePicker: UIPickerView!
     
     @IBOutlet weak var songTextField: UITextField!
     
@@ -33,8 +40,11 @@ class ViewController: UIViewController, WCSessionDelegate, UIImagePickerControll
         
         let songName = songTextField.text
         let artistName = artistTextField.text
+
+//        lan
+        let language = languages[languagePicker.selectedRowInComponent(0)]
         
-        socket.emit("song", songName!, artistName!)
+        socket.emit("song", songName!, artistName!, language)
         
         print("song name: " + songName! + " by " + artistName!)
         
@@ -44,7 +54,7 @@ class ViewController: UIViewController, WCSessionDelegate, UIImagePickerControll
 //        // Or you can filter on various property
 //        // Like the Genre for example here
 //        var query = MPMediaQuery.songsQuery()
-//        let predicateByName = MPMediaPropertyPredicate(value: "21 Guns", forProperty: MPMediaItemPropertyTitle, comparisonType: .EqualTo)
+//        let predicateByName = MPMediaPropertyPredicate(value: "21 Guns", forProperty: MPMediaItemPropertyTitle, comparisonType: .)
 //        query.filterPredicates = NSSet(object: predicateByName) as? Set<MPMediaPredicate>
 //        
 //        let mediaCollection = MPMediaItemCollection(items: mediaItems!)
@@ -55,7 +65,7 @@ class ViewController: UIViewController, WCSessionDelegate, UIImagePickerControll
 //        player.play()
 
         let query = MPMediaQuery.songsQuery()
-        let isPresent = MPMediaPropertyPredicate(value: songName, forProperty: MPMediaItemPropertyTitle, comparisonType: .EqualTo)
+        let isPresent = MPMediaPropertyPredicate(value: songName, forProperty: MPMediaItemPropertyTitle, comparisonType: .Contains)
         query.addFilterPredicate(isPresent)
         
         let result = query.collections
@@ -75,6 +85,19 @@ class ViewController: UIViewController, WCSessionDelegate, UIImagePickerControll
         
 
         
+    }
+    
+    // SET UP THE PICKERVIEW
+    func numberOfComponentsInPickerView(pickerView: UIPickerView) -> Int {
+        return 1 // hardcoded
+    }
+    
+    func pickerView(pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+        return 10
+    }
+    
+    func pickerView(pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+        return languages[row]
     }
     
     
@@ -97,6 +120,8 @@ class ViewController: UIViewController, WCSessionDelegate, UIImagePickerControll
             
             let originalText = data[0] as! String
             let translatedText = data[1] as! String
+            
+            
             
             self.lyricsLayer.string = originalText + "\n\n\n" + translatedText
             
@@ -132,13 +157,13 @@ class ViewController: UIViewController, WCSessionDelegate, UIImagePickerControll
                 captureSession?.addOutput(output)
                 
                 previewLayer = AVCaptureVideoPreviewLayer(session: captureSession)
-                previewLayer?.videoGravity = AVLayerVideoGravityResizeAspect
-                previewLayer?.frame = CGRect(x: 0, y: 0, width: 300, height: 400)
+                previewLayer?.videoGravity = AVLayerVideoGravityResizeAspectFill
+                previewLayer?.frame = CGRect(x: 13, y: 40, width: 300, height:  self.view.bounds.size.width - 100)
                 //previewLayer?.frame = CGRect(self.view.bounds)
                 
                 let replicatorLayer = CAReplicatorLayer()
                 //replicatorLayer.frame = CGRectMake(0, 0, self.view.bounds.size.width / 2, self.view.bounds.size.height)
-                replicatorLayer.frame = CGRectMake(0, 0, 400, 400)
+                replicatorLayer.frame = CGRectMake(13, 40, 400, self.view.bounds.size.width - 100)
                 replicatorLayer.instanceCount = 2
                 //replicatorLayer.instanceTransform = CATransform3DMakeTranslation(self.view.bounds.size.width / 2, 0.0, 0.0)
                 replicatorLayer.instanceTransform = CATransform3DMakeTranslation(310, 0.0, 0.0)
@@ -150,7 +175,7 @@ class ViewController: UIViewController, WCSessionDelegate, UIImagePickerControll
                 // setup the layer
                 lyricsLayer.font = "Helvetica"
                 lyricsLayer.fontSize = 13
-                lyricsLayer.frame = CGRectMake(10, 120, 150, 150) // x, y, width, heights NOTE: THE LYRICSLAYER STARTS AT 0,0, BUT THE CAMERA VIEW IS LOWER THAN THIS
+                lyricsLayer.frame = CGRectMake(10, 120, 311, 311) // x, y, width, heights NOTE: THE LYRICSLAYER STARTS AT 0,0, BUT THE CAMERA VIEW IS LOWER THAN THIS
                 lyricsLayer.alignmentMode = kCAAlignmentCenter
                 lyricsLayer.string = "Lyrics Translator"
                 lyricsLayer.foregroundColor = UIColor.whiteColor().CGColor
