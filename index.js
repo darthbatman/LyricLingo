@@ -3,7 +3,7 @@ var http = require('http').Server(app);
 var lyr = require('lyrics-fetcher');
 var bt = require('bing-translate').init({
     client_id: 'lyricTest',
-    client_secret: ''
+    client_secret: 'jK8rGTi6dSSk7Hdyywfra/PkUscoI2J5AXPmi/qdt9Q='
 });
 var io = require("socket.io")(http);
 var SpotifyWebApi = require('spotify-web-api-node');
@@ -12,8 +12,8 @@ var SpotifyWebApi = require('spotify-web-api-node');
 
 // credentials are optional
 var spotifyApi = new SpotifyWebApi({
-  clientId : '',
-  clientSecret : ''
+  clientId : 'c5339edbd19441f69820b06cd5dcb3e6',
+  clientSecret : '673a3ddd66fe44d390e9fbecdc3a70b7'
 });
 
   Array.prototype.remove = function(from, to) { var rest = this.slice((to || from) + 1 || this.length); this.length = from < 0 ? this.length + from : from; return this.push.apply(this, rest); };
